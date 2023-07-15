@@ -9,8 +9,6 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
 
-import APIBaitap.Season;
-
 public class Food {
 	private String id;
 	private String quantity;
@@ -99,23 +97,52 @@ public class Food {
 			
 	}
 	
+	public static boolean Check(String id, ArrayList<Food> list){
+		boolean x = true;
+		for(Food temp : list) {
+			if(temp.getId().equals(id)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static ArrayList<Food> inputCheckID_Name() {
+		ArrayList<Food> list = new ArrayList<Food>();
+		try {
+			 Scanner sc = new Scanner(System.in);
+			    boolean exit = false; 
+			    while (!exit) {
+			        Food food = new Food();
+			        food.inputFoodID_Name();
+			        
+			        while(true) {
+			        	if(Check(food.getId(), list) == false) {
+			        		System.out.println("ID has been existed");
+					        food.inputFoodID_Name();
+			        	}
+			        	else {		
+			        		list.add(food);
+			        		break;
+			        	}
+			        }
+			        System.out.println("Do you want to enter more ID and Quantity? (Y/N)");
+			        String choice = sc.nextLine();  
+			        if (choice.equalsIgnoreCase("N")) {
+			            exit = true;
+			        }
+			 }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+}
+	    
 	public void outputFileID_Name(){
 		 ArrayList<Food> list = new ArrayList<Food>();
-		    Scanner sc = new Scanner(System.in);
-		    boolean exit = false;
-		    
-		    while (!exit) {
-		        Food food = new Food();
-		        food.inputFoodID_Name();
-		        list.add(food); 
-		        System.out.println("Do you want to enter more ID and Name? (Y/N)");
-		        String choice = sc.nextLine();  
-		        if (choice.equalsIgnoreCase("N")) {
-		            exit = true;
-		        }
-		    }
+		 list = inputCheckID_Name();
 		try {
-			FileWriter fWriter = new FileWriter("C:\\Users\\Admin\\Desktop\\lib java\\Java\\ID_Name.txt");
+			FileWriter fWriter = new FileWriter("D:\\QA\\ID_Name.txt");
 			BufferedWriter bWriter = new BufferedWriter(fWriter);
 			for(Food data : list) {
 				bWriter.write(data.getId() + "-" + data.getName());
@@ -130,17 +157,12 @@ public class Food {
 	
 	public void outputFileID_Quantity(){
 		 ArrayList<Food> list = new ArrayList<Food>();
-		 Set<String> idSet = new HashSet<>();
 		    Scanner sc = new Scanner(System.in);
 		    boolean exit = false;
 		    while (!exit) {
 		        Food food = new Food();
 		        food.inputFoodID_Quantity();
 		        list.add(food); 
-		        if (idSet.contains(food.getId())) {
-		            System.out.println("ID has been existenced!");
-		            continue;
-		        }
 		        System.out.println("Do you want to enter more ID and Quantity? (Y/N)");
 		        String choice = sc.nextLine();  
 		        if (choice.equalsIgnoreCase("N")) {
@@ -148,7 +170,7 @@ public class Food {
 		        }
 		    }
 		try {
-			FileWriter fWriter = new FileWriter("C:\\Users\\Admin\\Desktop\\lib java\\Java\\ID_Quantity.txt");
+			FileWriter fWriter = new FileWriter("D:\\QA\\ID_Quantity.txt");
 			BufferedWriter bWriter = new BufferedWriter(fWriter);
 			for(Food data : list) {
 				bWriter.write(data.getId() + "-" + data.getQuantity());
@@ -176,7 +198,7 @@ public class Food {
 		        }
 		    }
 		try {
-			FileWriter fWriter = new FileWriter("C:\\Users\\Admin\\Desktop\\lib java\\Java\\ID_Price.txt");
+			FileWriter fWriter = new FileWriter("D:\\QA\\ID_Price.txt");
 			BufferedWriter bWriter = new BufferedWriter(fWriter);
 			for(Food data : list) {
 				bWriter.write(data.getId() + "-" + data.getPrice());
